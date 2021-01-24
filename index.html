@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit Fortune Machine</title>
+
+    <style>
+        ul{
+            /* border: 1px solid blue; */
+            width: 300px;
+            height: 300px;
+            position: relative;
+            margin: auto;
+            margin-top: 3%;
+            align-items: center;
+            display: flex;
+        }
+    
+        li{
+            list-style: none;
+            border: 1px solid pink;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            position: absolute;
+            top: 0px;
+            left: 100px;
+            /* background-image: url('images/77.png'); */
+            background-size: contain;
+        }
+
+        button{
+            margin: auto;
+            align-items: center;
+            display: flex;
+            height: 28px;
+        }
+
+        #footer{
+            width: 500px;
+            margin: auto;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        #msg{
+            width: 600px;
+            height: 50px;
+            display: block;
+            /* border: solid rosybrown; */
+            margin: auto;
+            margin-top: 80px;
+            position: relative;
+        }
+
+        #score{
+            width: 650px;
+            display: block;
+            margin: auto;
+            text-align: center;
+            margin-top: 80px;            
+        }
+
+        #active{
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            z-index: 1000;
+        }
+        
+    </style>
+
+    <script>
+        window.onload = function(){
+            var fruits = [
+                {left:'0px', top:'0px', content:'Orange', src:'orange.png', score:'10'},
+                {left:'50px', top:'0px', content:'Bell', src:'bell.png', score:'20'},
+                {left:'100px', top:'0px', content:'50BAR', src:'50bar.png', score:'50'},
+                {left:'150px', top:'0px', content:'100BAR', src:'100bar.png', score:'100'},
+                {left:'200px', top:'0px', content:'Apple', src:'apple.png', score:'2'},
+                {left:'250px', top:'0px', content:'Apple', src:'apple.png', score:'2'},
+                {left:'300px', top:'0px', content:'Lime', src:'lime.png', score:'15'},
+                {left:'300px', top:'50px', content:'Double Melons', src:'bdlMelon.png', score:'25'},
+                {left:'300px', top:'100px', content:'Melon', src:'melon.png', score:'5'},
+                {left:'300px', top:'150px', content:'Bad Luck', src:'cha.png', score:'-10'},
+                {left:'300px', top:'200px', content:'Apple', src:'apple.png', score:'2'},
+                {left:'300px', top:'250px', content:'Orange', src:'orange.png', score:'10'},
+                {left:'300px', top:'300px', content:'Bell', src:'bell.png', score:'20'},
+                {left:'250px', top:'300px', content:'Single 7', src:'7.png', score:'40'},
+                {left:'200px', top:'300px', content:'Bad Luck', src:'cha.png', score:'-10'},
+                {left:'150px', top:'300px', content:'Orange', src:'orange.png', score:'10'},
+                {left:'100px', top:'300px', content:'Apple', src:'apple.png', score:'2'},
+                {left:'50px', top:'300px', content:'Lime', src:'lime.png', score:'15'},
+                {left:'0px', top:'300px', content:'Double Star', src:'dblstar.png', score:'40'},
+                {left:'0px', top:'250px', content:'Star', src:'star.png', score:'20'},
+                {left:'0px', top:'200px', content:'Bad Luck', src:'cha.png', score:'-10'},
+                {left:'0px', top:'150px', content:'Apple', src:'apple.png', score:'2'},
+                {left:'0px', top:'100px', content:'Bell', src:'bell.png', score:'20'},
+                {left:'0px', top:'50px', content:'Double 7', src:'77.png', score:'80'},
+            ];
+
+        var ul = document.getElementById('machine');
+        for ( var i = 0; i < fruits.length; i++){
+            var li = document.createElement('li');
+            li.style.left = fruits[i].left;
+            li.style.top = fruits[i].top;
+            li.style.backgroundImage = `url('images/${fruits[i].src}')`;
+            ul.appendChild(li);
+            }
+            
+        
+        var list = [
+            {left:'0px', top:'0px', content:'Apple', src:'apple.png', score:'2'},    
+            {left:'50px', top:'0px', content:'Orange', src:'orange.png', score:'10'},
+            {left:'100px', top:'0px', content:'Lime', src:'lime.png', score:'15'},
+            {left:'150px', top:'0px', content:'Double Melons', src:'bdlMelon.png', score:'25'},
+            {left:'200px', top:'0px', content:'Melon', src:'melon.png', score:'5'},
+            {left:'250px', top:'0px', content:'Bell', src:'bell.png', score:'20'},
+            {left:'300px', top:'0px', content:'50BAR', src:'50bar.png', score:'50'},
+            {left:'350px', top:'0px', content:'100BAR', src:'100bar.png', score:'100'},
+            {left:'400px', top:'0px', content:'Double Star', src:'dblstar.png', score:'40'},
+            {left:'450px', top:'0px', content:'Star', src:'star.png', score:'20'},
+            {left:'500px', top:'0px', content:'Double 7', src:'77.png', score:'80'},
+            {left:'550px', top:'0px', content:'Single 7', src:'7.png', score:'40'},
+            {left:'600px', top:'0px', content:'Bad Luck', src:'cha.png', score:'-10'},
+        ]
+
+        var ulMsg = document.getElementById('msg');
+        for ( var i = 0; i < list.length; i++){
+            var li = document.createElement('li');
+            li.style.left = list[i].left;
+            li.style.top = list[i].top;
+            li.style.backgroundImage = `url('images/${list[i].src}')`;
+            ulMsg.appendChild(li);
+        }
+
+        for ( var i = 0; i < list.length; i++){
+            var li = document.createElement('li');
+            li.style.left = list[i].left;
+            li.style.top = 50+'px';
+            li.innerText = list[i].score + "pts";
+            ulMsg.appendChild(li);
+        }
+        
+        var div, timer, step, index = 0, total = 50; 
+        var btn = document.getElementById('btn');
+        btn.onclick = function(){
+            clearTimeout(timer);
+            step = fruits.length*2 + parseInt(Math.random()*35);
+
+            function turnOn(){
+            div = document.getElementById('active');
+            div.style.display = 'block';
+            div.style.left = fruits[index].left;
+            div.style.top = fruits[index].top;
+            div.style.backgroundColor = 'red';
+            div.style.opacity = 0.5;
+
+            step--;
+            if (step == 0) {
+                clearTimeout(timer);
+                var roundScore = document.getElementById('score');
+                total = total + parseInt(fruits[index].score);
+                roundScore.innerHTML = fruits[index].content +": " + fruits[index].score + "pts; Total Points: " + total + "pts";
+                return;
+            }
+
+            index++;
+            if (index == fruits.length){
+                index = 0;
+            }
+
+            //使用一次性定时器
+            timer = setTimeout(turnOn, 1200/step);
+        }
+            turnOn();
+        }
+    }
+    </script>
+
+</head>
+<body>
+    <ul id="machine">
+        <div id="active"></div>
+    </ul>
+
+    <ul id="msg"> </ul>
+
+    <div id="score">Starting Points: 50</div>
+
+    <div id="footer">
+        <button id="btn">Start</button>
+    </div>
+
+</body>
+</html>
